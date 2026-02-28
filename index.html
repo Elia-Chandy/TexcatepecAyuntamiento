@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayuntamiento de Texcatepec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vino: #6B1020;
+    --vino-dark: #4A0B16;
+    --vino-light: #8B1A2E;
+    --azul: #0D2B4E;
+    --azul-dark: #081A30;
+    --azul-light: #1A3D6B;
+    --gold: #C9A227;
+    --cream: #F5F0E8;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+    --text: #1F2937;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    color: var(--text);
+    background: #fff;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: var(--azul-dark);
+    border-bottom: 3px solid var(--vino);
+  }
+
+  .nav-top {
+    background: var(--vino-dark);
+    padding: 6px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(255,255,255,0.8);
+  }
+
+  .nav-main {
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px;
+    text-decoration: none;
+    padding: 14px 0;
+  }
+
+  .nav-logo-icon {
+    width: 52px; height: 52px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .nav-logo-text { color: white; }
+  .nav-logo-text .main { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+  .nav-logo-text .sub { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 1px; text-transform: uppercase; }
+
+  .nav-links {
+    display: flex; gap: 0; list-style: none;
+  }
+
+  .nav-links a {
+    display: block; padding: 22px 18px;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+    transform: scaleX(0); transition: transform 0.2s;
+  }
+
+  .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+  .nav-links a:hover, .nav-links a.active { color: white; }
+
+  /* ===== WEATHER WIDGET ===== */
+  .weather-widget {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.1);
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 13px; color: white;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ===== HERO ===== */
+  .hero {
+    margin-top: 95px;
+    height: 88vh;
+    background: linear-gradient(135deg, var(--azul-dark) 0%, var(--azul) 40%, var(--vino-dark) 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px),
+      repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px);
+  }
+
+  .hero-content {
+    position: relative; z-index: 2; text-align: center;
+    animation: fadeInUp 1s ease;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--azul-dark);
+    padding: 6px 20px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    color: white; line-height: 1.1; margin-bottom: 16px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .hero-sub { font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 40px; font-weight: 300; }
+
+  .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .btn {
+    padding: 13px 30px; border-radius: 4px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; border: 2px solid transparent;
+    text-decoration: none; display: inline-block;
+    transition: all 0.2s; letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .btn-gold { background: var(--gold); color: var(--azul-dark); border-color: var(--gold); }
+  .btn-gold:hover { background: transparent; color: var(--gold); }
+  .btn-outline { background: transparent; color: white; border-color: rgba(255,255,255,0.5); }
+  .btn-outline:hover { background: white; color: var(--azul-dark); border-color: white; }
+  .btn-vino { background: var(--vino); color: white; border-color: var(--vino); }
+  .btn-vino:hover { background: var(--vino-dark); border-color: var(--vino-dark); }
+  .btn-azul { background: var(--azul); color: white; border-color: var(--azul); }
+  .btn-azul:hover { background: var(--azul-dark); border-color: var(--azul-dark); }
+
+  /* ===== WELCOME ===== */
+  .welcome {
+    padding: 80px 40px;
+    background: var(--cream);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--vino); margin-bottom: 12px;
+  }
+
+  .welcome h2 { font-size: 38px; color: var(--azul-dark); margin-bottom: 20px; line-height: 1.2; }
+  .welcome p { color: var(--gray); line-height: 1.8; margin-bottom: 16px; }
+
+  .welcome-image {
+    background: linear-gradient(135deg, var(--vino) 0%, var(--azul) 100%);
+    border-radius: 8px; height: 380px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px; position: relative; overflow: hidden;
+  }
+
+  .welcome-image::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 21px);
+  }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header {
+    margin-top: 95px;
+    background: linear-gradient(135deg, var(--azul-dark), var(--vino-dark));
+    padding: 60px 40px;
+    position: relative; overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.02) 30px, rgba(255,255,255,0.02) 31px);
+  }
+
+  .page-header-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-header .breadcrumb { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 8px; }
+  .page-header h1 { color: white; font-size: 42px; }
+  .page-header .gold-line { width: 60px; height: 3px; background: var(--gold); margin-top: 16px; }
+
+  /* ===== CONTAINER ===== */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+  /* ===== NOTICIAS ===== */
+  .news-section { padding: 80px 40px; background: white; }
+  .news-section .container { max-width: 1200px; margin: 0 auto; }
+
+  .section-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 40px;
+  }
+
+  .section-header h2 { font-size: 34px; color: var(--azul-dark); }
+
+  .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .news-card {
+    border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .news-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+
+  .news-card-image {
+    height: 200px;
+    background: linear-gradient(135deg, var(--vino-light), var(--azul));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; color: rgba(255,255,255,0.3);
+    position: relative;
+  }
+
+  .news-card-cat {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--vino); color: white;
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  .news-card-body { padding: 20px; }
+  .news-card-date { font-size: 12px; color: var(--gray); margin-bottom: 8px; }
+  .news-card h3 { font-size: 18px; color: var(--azul-dark); margin-bottom: 10px; line-height: 1.3; }
+  .news-card p { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+  /* ===== DOCS RAPIDOS ===== */
+  .docs-section { padding: 80px 40px; background: var(--gray-light); }
+
+  .docs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+  .doc-card {
+    background: white; border-radius: 8px; padding: 24px;
+    border-left: 4px solid var(--vino);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+
+  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+  .doc-icon {
+    width: 44px; height: 44px;
+    background: var(--vino); color: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .doc-card h4 { font-size: 15px; color: var(--azul-dark); line-height: 1.3; }
+  .doc-card .doc-date { font-size: 12px; color: var(--gray); }
+
+  /* ===== AYUNTAMIENTO ===== */
+  .content-section { padding: 60px 0; }
+
+  .card {
+    background: white; border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden; margin-bottom: 24px;
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, var(--azul-dark), var(--azul));
+    padding: 24px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .card-header h3 { color: white; font-size: 22px; }
+  .card-header .date-badge { background: var(--gold); color: var(--azul-dark); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+
+  .card-body { padding: 30px; }
+
+  .objectives-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+
+  .objectives-list li {
+    background: var(--gray-light); padding: 14px 16px; border-radius: 6px;
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 14px; color: var(--text); line-height: 1.4;
+  }
+
+  .objectives-list li::before { content: '✓'; color: var(--vino); font-weight: 700; flex-shrink: 0; }
+
+  /* ===== TABLE ===== */
+  .table-wrap { overflow-x: auto; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--azul-dark); color: white; }
+  thead th { padding: 14px 16px; text-align: left; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+  tbody tr { border-bottom: 1px solid #E5E7EB; transition: background 0.15s; }
+  tbody tr:hover { background: var(--gray-light); }
+  tbody td { padding: 14px 16px; font-size: 14px; color: var(--text); }
+
+  .tag {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  .tag-vino { background: rgba(107,16,32,0.1); color: var(--vino); }
+  .tag-azul { background: rgba(13,43,78,0.1); color: var(--azul); }
+
+  /* ===== TRANSPARENCIA ===== */
+  .info-box {
+    background: linear-gradient(135deg, var(--azul-dark), var(--azul));
+    color: white; border-radius: 8px; padding: 30px;
+    margin-bottom: 24px;
+  }
+
+  .info-box h3 { margin-bottom: 12px; }
+  .info-box p { opacity: 0.85; line-height: 1.7; }
+
+  .links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+
+  .link-card {
+    background: rgba(255,255,255,0.1); border-radius: 6px; padding: 16px;
+    color: white; text-decoration: none;
+    transition: background 0.2s;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .link-card:hover { background: rgba(255,255,255,0.2); }
+  .link-card span { font-size: 20px; }
+
+  /* ===== CONTACTO ===== */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 60px 0; }
+
+  .contact-info h3 { font-size: 28px; color: var(--azul-dark); margin-bottom: 24px; }
+
+  .contact-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .contact-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: var(--vino); color: white; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .contact-item h4 { font-size: 14px; font-weight: 600; color: var(--azul-dark); margin-bottom: 4px; }
+  .contact-item p { font-size: 15px; color: var(--gray); }
+
+  .whatsapp-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: #25D366; color: white;
+    padding: 14px 28px; border-radius: 6px;
+    text-decoration: none; font-weight: 600; font-size: 15px;
+    margin-top: 10px; width: fit-content;
+    transition: background 0.2s;
+  }
+
+  .whatsapp-btn:hover { background: #1EA952; }
+
+  /* ===== FORM ===== */
+  .contact-form h3 { font-size: 28px; color: var(--azul-dark); margin-bottom: 24px; }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-group label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--azul-dark); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .form-control {
+    width: 100%; padding: 12px 16px;
+    border: 2px solid #E5E7EB; border-radius: 6px;
+    font-family: 'Barlow', sans-serif; font-size: 15px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-control:focus { border-color: var(--vino); }
+
+  textarea.form-control { min-height: 140px; resize: vertical; }
+
+  .form-success {
+    display: none;
+    background: #D1FAE5; border: 1px solid #6EE7B7;
+    color: #065F46; padding: 16px 20px; border-radius: 6px;
+    margin-top: 16px; font-size: 14px;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--azul-dark);
+    border-top: 4px solid var(--vino);
+  }
+
+  .footer-main {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+    padding: 60px 40px; max-width: 1200px; margin: 0 auto;
+  }
+
+  .footer-brand .logo-text { color: white; font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 8px; }
+  .footer-brand p { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+
+  .footer-socials { display: flex; gap: 10px; }
+
+  .social-btn {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    color: white; text-decoration: none; font-size: 16px;
+    transition: background 0.2s;
+  }
+
+  .social-btn:hover { background: var(--vino); }
+
+  .footer-col h4 { color: white; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+  .footer-col ul a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    background: var(--azul-dark);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 100%;
+  }
+
+  .footer-bottom p { color: rgba(255,255,255,0.5); font-size: 13px; }
+  .footer-bottom a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--gold); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate { animation: fadeInUp 0.6s ease both; }
+
+  /* ===== DETAIL MODAL ===== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.6);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: white; border-radius: 10px;
+    max-width: 800px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, var(--azul-dark), var(--vino-dark));
+    padding: 24px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .modal-header h3 { color: white; font-size: 22px; }
+  .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+  .modal-body { padding: 30px; }
+
+  /* ===== PRENSA ===== */
+  .news-detail-img {
+    height: 300px;
+    background: linear-gradient(135deg, var(--vino), var(--azul));
+    border-radius: 8px; margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav-main { padding: 0 20px; }
+    .nav-links { display: none; }
+    .welcome { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px; }
+    .news-grid { grid-template-columns: 1fr; }
+    .docs-grid { grid-template-columns: 1fr 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-main { grid-template-columns: 1fr 1fr; gap: 30px; padding: 40px 20px; }
+    .links-grid { grid-template-columns: 1fr; }
+    .objectives-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-top">
+    <span>🏛️ Gobierno Municipal de Texcatepec, Veracruz</span>
+    <div class="weather-widget" id="weatherWidget">
+      <span>🌤️</span>
+      <span id="weatherTemp">--°C</span>
+      <span id="weatherDesc">Cargando...</span>
+    </div>
+  </div>
+  <div class="nav-main">
+    <a href="#" class="nav-logo" onclick="showSection('inicio')">
+      <div class="nav-logo-icon">🏛️</div>
+      <div class="nav-logo-text">
+        <div class="main">Texcatepec</div>
+        <div class="sub">Ayuntamiento Municipal</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showSection('inicio')" class="active" id="nav-inicio">Inicio</a></li>
+      <li><a href="#" onclick="showSection('ayuntamiento')" id="nav-ayuntamiento">Ayuntamiento</a></li>
+      <li><a href="#" onclick="showSection('transparencia')" id="nav-transparencia">Transparencia</a></li>
+      <li><a href="#" onclick="showSection('prensa')" id="nav-prensa">Prensa</a></li>
+      <li><a href="#" onclick="showSection('contacto')" id="nav-contacto">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== SECTION: INICIO ===== -->
+<div class="section active" id="section-inicio">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-content animate">
+      <div class="hero-badge">Gobierno Municipal 2024–2027</div>
+      <h1>Ayuntamiento de<br>Texcatepec</h1>
+      <p class="hero-sub">Trabajando por el desarrollo y bienestar de nuestra comunidad</p>
+      <div class="hero-ctas">
+        <a class="btn btn-gold" onclick="showSection('transparencia')">Portal de Transparencia</a>
+        <a class="btn btn-outline" onclick="showSection('contacto')">Contactar al Ayuntamiento</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WELCOME -->
+  <div style="background: var(--cream);">
+    <div class="welcome">
+      <div>
+        <div class="section-label">Mensaje de Bienvenida</div>
+        <h2>Comprometidos con Texcatepec</h2>
+        <p>Bienvenidos al portal oficial del Ayuntamiento de Texcatepec, Veracruz. Este espacio digital es su ventana directa a los servicios, información y transparencia que su gobierno municipal está obligado a proveer.</p>
+        <p>Nuestro compromiso es con el desarrollo sostenible, la transparencia y el bienestar de cada familia texcatepecana. Aquí encontrará acceso a documentos oficiales, noticias y trámites de su municipio.</p>
+        <a class="btn btn-vino" style="margin-top:8px;" onclick="showSection('ayuntamiento')">Conocer el Plan Municipal</a>
+      </div>
+      <div class="welcome-image">🏔️</div>
+    </div>
+  </div>
+
+  <!-- NOTICIAS -->
+  <section class="news-section">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Actualidad</div>
+          <h2>Últimas Noticias</h2>
+        </div>
+        <a class="btn btn-azul" onclick="showSection('prensa')">Ver todas</a>
+      </div>
+      <div class="news-grid" id="homeNewsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCS RAPIDOS -->
+  <section class="docs-section">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-header" style="margin-bottom:32px;">
+        <div>
+          <div class="section-label">Acceso Rápido</div>
+          <h2>Documentos Importantes</h2>
+        </div>
+      </div>
+      <div class="docs-grid" id="quickDocsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== SECTION: AYUNTAMIENTO ===== -->
+<div class="section" id="section-ayuntamiento">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">Inicio / Ayuntamiento</div>
+      <h1>Ayuntamiento</h1>
+      <div class="gold-line"></div>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:0;padding-bottom:60px;">
+    <div style="display:grid;grid-template-columns:1fr 3fr;gap:30px;margin-top:30px;">
+
+      <!-- Sidebar -->
+      <div>
+        <div class="card">
+          <div style="background:var(--vino-dark);padding:16px 20px;">
+            <h4 style="color:white;font-size:13px;letter-spacing:1px;text-transform:uppercase;">Secciones</h4>
+          </div>
+          <div style="padding:12px 0;">
+            <a onclick="showAyunt('pmd')" style="display:block;padding:12px 20px;font-size:14px;color:var(--text);text-decoration:none;border-left:3px solid transparent;cursor:pointer;" id="ayunt-pmd" class="sidebar-link active-link">📋 Plan Municipal de Desarrollo</a>
+            <a onclick="showAyunt('archivo')" style="display:block;padding:12px 20px;font-size:14px;color:var(--text);text-decoration:none;border-left:3px solid transparent;cursor:pointer;" id="ayunt-archivo" class="sidebar-link">🗄️ Archivo Municipal</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div>
+        <!-- PMD -->
+        <div id="ayunt-content-pmd">
+          <div class="card">
+            <div class="card-header">
+              <h3>Plan Municipal de Desarrollo 2024–2027</h3>
+              <span class="date-badge">Marzo 2024</span>
+            </div>
+            <div class="card-body">
+              <div class="section-label" style="margin-bottom:8px;">Descripción General</div>
+              <p style="color:var(--gray);line-height:1.7;margin-bottom:24px;">El Plan Municipal de Desarrollo 2024-2027 es el documento rector que establece las prioridades, estrategias y acciones del gobierno municipal para impulsar el desarrollo integral de Texcatepec. Este plan fue elaborado con la participación activa de la ciudadanía en foros y consultas públicas realizadas en las distintas comunidades del municipio.</p>
+
+              <div class="section-label" style="margin-bottom:8px;">Objetivos Estratégicos</div>
+              <ul class="objectives-list">
+                <li>Mejoramiento de infraestructura vial y comunicaciones</li>
+                <li>Fortalecimiento de servicios de salud comunitarios</li>
+                <li>Acceso universal a educación de calidad</li>
+                <li>Desarrollo económico y fomento al empleo</li>
+                <li>Protección del medio ambiente y recursos naturales</li>
+                <li>Transparencia y buen gobierno</li>
+                <li>Desarrollo social y atención a grupos vulnerables</li>
+                <li>Seguridad pública y cultura de paz</li>
+              </ul>
+
+              <div style="margin-top:28px;padding:20px;background:var(--gray-light);border-radius:8px;display:flex;align-items:center;gap:16px;">
+                <div style="font-size:40px;">📄</div>
+                <div>
+                  <div style="font-weight:600;color:var(--azul-dark);margin-bottom:4px;">Plan Municipal de Desarrollo 2024-2027</div>
+                  <div style="font-size:13px;color:var(--gray);margin-bottom:10px;">Documento oficial completo en formato PDF — Publicado: 15 de marzo de 2024</div>
+                  <a href="#" class="btn btn-vino" style="font-size:13px;padding:8px 20px;">⬇️ Descargar PDF</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHIVO -->
+        <div id="ayunt-content-archivo" style="display:none;">
+          <div class="card">
+            <div class="card-header">
+              <h3>Archivo Municipal</h3>
+              <span class="date-badge">Actualizado 2024</span>
+            </div>
+            <div class="card-body">
+              <p style="color:var(--gray);margin-bottom:24px;">Repositorio oficial de documentos históricos y administrativos del municipio de Texcatepec.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Título</th>
+                      <th>Fecha</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="archivoTable">
+                    <!-- JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION: TRANSPARENCIA ===== -->
+<div class="section" id="section-transparencia">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">Inicio / Transparencia</div>
+      <h1>Transparencia</h1>
+      <div class="gold-line"></div>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:0;padding-bottom:60px;">
+    <div style="display:grid;grid-template-columns:1fr 3fr;gap:30px;margin-top:30px;">
+      <div>
+        <div class="card">
+          <div style="background:var(--vino-dark);padding:16px 20px;">
+            <h4 style="color:white;font-size:13px;letter-spacing:1px;text-transform:uppercase;">Secciones</h4>
+          </div>
+          <div style="padding:12px 0;">
+            <a onclick="showTransp('portal')" style="display:block;padding:12px 20px;font-size:14px;color:var(--text);text-decoration:none;border-left:3px solid transparent;cursor:pointer;" id="transp-portal" class="sidebar-link active-link">🔍 Portal de Transparencia</a>
+            <a onclick="showTransp('obligaciones')" style="display:block;padding:12px 20px;font-size:14px;color:var(--text);text-decoration:none;border-left:3px solid transparent;cursor:pointer;" id="transp-obligaciones" class="sidebar-link">📋 Obligaciones Comunes</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <!-- PORTAL -->
+        <div id="transp-content-portal">
+          <div class="info-box">
+            <h3>Portal de Transparencia Municipal</h3>
+            <p>El Ayuntamiento de Texcatepec, en cumplimiento a la Ley General de Transparencia y Acceso a la Información Pública, pone a disposición de la ciudadanía la siguiente información de interés público.</p>
+            <div class="links-grid">
+              <a href="#" class="link-card"><span>💰</span> Presupuesto de Egresos</a>
+              <a href="#" class="link-card"><span>📊</span> Cuenta Pública</a>
+              <a href="#" class="link-card"><span>📝</span> Licitaciones y Contratos</a>
+              <a href="#" class="link-card"><span>👥</span> Directorio de Funcionarios</a>
+              <a href="#" class="link-card"><span>📅</span> Agenda del Presidente</a>
+              <a href="#" class="link-card"><span>📌</span> Reglamentos</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>Documentos Oficiales</h3></div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Documento</th><th>Tipo</th><th>Fecha</th><th>Descarga</th></tr></thead>
+                  <tbody id="transparenciaTable"><!-- JS --></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OBLIGACIONES -->
+        <div id="transp-content-obligaciones" style="display:none;">
+          <div class="card">
+            <div class="card-header"><h3>Obligaciones de Transparencia Comunes</h3></div>
+            <div class="card-body">
+              <p style="color:var(--gray);margin-bottom:24px;">Conforme al Artículo 70 de la Ley General de Transparencia, el municipio publica las siguientes obligaciones:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nombre de la Ley / Fracción</th>
+                      <th>Responsable</th>
+                      <th>Actualización</th>
+                      <th>Documento</th>
+                    </tr>
+                  </thead>
+                  <tbody id="obligacionesTable"><!-- JS --></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION: PRENSA ===== -->
+<div class="section" id="section-prensa">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">Inicio / Prensa</div>
+      <h1>Noticias y Prensa</h1>
+      <div class="gold-line"></div>
+    </div>
+  </div>
+
+  <div class="container" style="padding:40px 40px 60px;">
+    <div class="news-grid" id="prensaGrid">
+      <!-- JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION: CONTACTO ===== -->
+<div class="section" id="section-contacto">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">Inicio / Contacto</div>
+      <h1>Contacto</h1>
+      <div class="gold-line"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Información de Contacto</h3>
+
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <h4>Dirección</h4>
+            <p>Calle Hidalgo S/N, Centro,<br>Texcatepec, Veracruz, C.P. 92980</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <h4>Teléfono</h4>
+            <p>(782) 123-4567</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <h4>Correo Electrónico</h4>
+            <p>contacto@texcatepec.gob.mx</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <h4>Horario de Atención</h4>
+            <p>Lunes a Viernes: 9:00 – 17:00 hrs<br>Sábados: 9:00 – 13:00 hrs</p>
+          </div>
+        </div>
+
+        <a href="https://wa.me/527821234567" class="whatsapp-btn" target="_blank">
+          <span style="font-size:22px;">💬</span>
+          Contactar por WhatsApp
+        </a>
+      </div>
+
+      <div class="contact-form">
+        <h3>Formulario de Contacto</h3>
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" class="form-control" placeholder="Tu nombre completo" id="contactNombre">
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" class="form-control" placeholder="correo@ejemplo.com" id="contactCorreo">
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea class="form-control" placeholder="Escribe tu mensaje aquí..." id="contactMensaje"></textarea>
+        </div>
+        <button class="btn btn-vino" style="width:100%;padding:14px;" onclick="submitForm()">Enviar Mensaje</button>
+        <div class="form-success" id="formSuccess">
+          ✅ ¡Tu mensaje ha sido enviado exitosamente! Te responderemos a la brevedad.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Título</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="logo-text">🏛️ Ayuntamiento de Texcatepec</div>
+      <p>Gobierno Municipal 2024-2027. Comprometidos con el desarrollo y bienestar de todos los texcatepecanos.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="#" title="Facebook">📘</a>
+        <a class="social-btn" href="#" title="Twitter">🐦</a>
+        <a class="social-btn" href="#" title="YouTube">▶️</a>
+        <a class="social-btn" href="#" title="Instagram">📷</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Gobierno</h4>
+      <ul>
+        <li><a href="#" onclick="showSection('ayuntamiento')">Plan Municipal</a></li>
+        <li><a href="#" onclick="showSection('ayuntamiento')">Archivo Municipal</a></li>
+        <li><a href="#">Cabildo</a></li>
+        <li><a href="#">Reglamentos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Transparencia</h4>
+      <ul>
+        <li><a href="#" onclick="showSection('transparencia')">Portal de Transparencia</a></li>
+        <li><a href="#" onclick="showSection('transparencia')">Obligaciones Comunes</a></li>
+        <li><a href="#">Cuenta Pública</a></li>
+        <li><a href="#">Declaraciones</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <ul>
+        <li><a href="#" onclick="showSection('prensa')">Noticias</a></li>
+        <li><a href="#" onclick="showSection('contacto')">Contacto</a></li>
+        <li><a href="#">Trámites</a></li>
+        <li><a href="#">Aviso de Privacidad</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom" style="max-width:100%;padding:20px 40px;">
+    <div style="max-width:1200px;margin:0 auto;width:100%;display:flex;justify-content:space-between;">
+      <p>© 2024 Ayuntamiento de Texcatepec, Veracruz. Todos los derechos reservados.</p>
+      <div style="display:flex;gap:20px;">
+        <a href="#">Aviso de Privacidad</a>
+        <a href="#">Términos de Uso</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== CMS DATA (Strapi API simulation) =====
+// En producción, estos datos vienen de: fetch('http://localhost:1337/api/...')
+
+const CMS = {
+  noticias: [
+    { id:1, titulo:'Inauguración de obras de agua potable en la Colonia Centro', fecha:'20 de noviembre 2024', extracto:'El presidente municipal encabezó la inauguración de la red de agua potable que beneficia a más de 500 familias del municipio.', categoria:'Obras', emoji:'🚰' },
+    { id:2, titulo:'Entrega de apoyos del programa "Texcatepec Contigo"', fecha:'15 de noviembre 2024', extracto:'Más de 200 familias vulnerables recibieron apoyos en especie dentro del marco del programa social municipal.', categoria:'Desarrollo Social', emoji:'🤝' },
+    { id:3, titulo:'Cabildo aprueba nuevo reglamento de obras públicas', fecha:'10 de noviembre 2024', extracto:'Por unanimidad, el Honorable Cabildo aprobó el reglamento que moderniza los procesos de contratación de obra pública.', categoria:'Gobierno', emoji:'📋' },
+    { id:4, titulo:'Jornada de vacunación en comunidades de la sierra', fecha:'5 de noviembre 2024', extracto:'El Ayuntamiento en coordinación con la Secretaría de Salud llevó vacunas a las comunidades más alejadas del municipio.', categoria:'Salud', emoji:'💉' },
+    { id:5, titulo:'Festejo del Día de Muertos en la plaza principal', fecha:'2 de noviembre 2024', extracto:'Cientos de familias se congregaron en la plaza central para celebrar la tradicional festividad con ofrendas y actividades culturales.', categoria:'Cultura', emoji:'🌺' },
+    { id:6, titulo:'Apertura de nuevo módulo de atención ciudadana', fecha:'28 de octubre 2024', extracto:'El Ayuntamiento habilitó un nuevo módulo de atención para facilitar el acceso a trámites y servicios municipales.', categoria:'Servicios', emoji:'🏢' },
+  ],
+
+  documentos: [
+    { titulo:'Presupuesto Municipal 2024', fecha:'Enero 2024', emoji:'💰' },
+    { titulo:'Cuenta Pública 2023', fecha:'Mayo 2024', emoji:'📊' },
+    { titulo:'Reglamento de Obras', fecha:'Julio 2024', emoji:'🏗️' },
+    { titulo:'Plan Municipal de Desarrollo', fecha:'Marzo 2024', emoji:'📋' },
+  ],
+
+  archivo: [
+    { id:1, titulo:'Actas de Cabildo 2023', fecha:'2023', descripcion:'Conjunto de actas ordinarias y extraordinarias del H. Cabildo Municipal durante el ejercicio 2023.' },
+    { id:2, titulo:'Contratos de Obra Pública 2023', fecha:'2023', descripcion:'Contratos formalizados para la ejecución de obra pública municipal durante el ejercicio fiscal 2023.' },
+    { id:3, titulo:'Programa de Obras 2024', fecha:'Enero 2024', descripcion:'Programa anual de obras públicas y acciones aprobado para el ejercicio fiscal 2024.' },
+    { id:4, titulo:'Padrón de Beneficiarios DIF', fecha:'2024', descripcion:'Padrón actualizado de beneficiarios del sistema DIF Municipal con sus respectivos apoyos.' },
+  ],
+
+  transparencia: [
+    { titulo:'Presupuesto de Egresos 2024', tipo:'Financiero', fecha:'Enero 2024' },
+    { titulo:'Cuenta Pública 2023', tipo:'Financiero', fecha:'Mayo 2024' },
+    { titulo:'Nómina de Servidores Públicos', tipo:'Personal', fecha:'Octubre 2024' },
+    { titulo:'Contratos y Licitaciones 2024', tipo:'Contratos', fecha:'Septiembre 2024' },
+    { titulo:'Inventario de Bienes Muebles', tipo:'Patrimonio', fecha:'Diciembre 2023' },
+  ],
+
+  obligaciones: [
+    { nombre:'Art. 70 Frac. I – Normatividad', responsable:'Secretaria del Ayuntamiento', fecha:'Octubre 2024' },
+    { nombre:'Art. 70 Frac. II – Estructura Orgánica', responsable:'Presidencia Municipal', fecha:'Enero 2024' },
+    { nombre:'Art. 70 Frac. IV – Remuneraciones', responsable:'Tesorería Municipal', fecha:'Octubre 2024' },
+    { nombre:'Art. 70 Frac. VII – Plan de Desarrollo', responsable:'Presidencia Municipal', fecha:'Marzo 2024' },
+    { nombre:'Art. 70 Frac. XI – Convenios', responsable:'Secretaria del Ayuntamiento', fecha:'Septiembre 2024' },
+    { nombre:'Art. 70 Frac. XIV – Declaraciones Patrimoniales', responsable:'Contraloría Municipal', fecha:'Mayo 2024' },
+  ]
+};
+
+// ===== NAVIGATION =====
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+  return false;
+}
+
+function showAyunt(sub) {
+  document.getElementById('ayunt-content-pmd').style.display = sub === 'pmd' ? '' : 'none';
+  document.getElementById('ayunt-content-archivo').style.display = sub === 'archivo' ? '' : 'none';
+  document.querySelectorAll('.sidebar-link').forEach(l => l.style.borderLeftColor = 'transparent');
+  document.getElementById('ayunt-' + sub).style.borderLeftColor = 'var(--vino)';
+}
+
+function showTransp(sub) {
+  document.getElementById('transp-content-portal').style.display = sub === 'portal' ? '' : 'none';
+  document.getElementById('transp-content-obligaciones').style.display = sub === 'obligaciones' ? '' : 'none';
+  document.querySelectorAll('.sidebar-link').forEach(l => l.style.borderLeftColor = 'transparent');
+  document.getElementById('transp-' + sub).style.borderLeftColor = 'var(--vino)';
+}
+
+// ===== RENDER =====
+function renderHomeNews() {
+  const grid = document.getElementById('homeNewsGrid');
+  grid.innerHTML = CMS.noticias.slice(0,3).map(n => `
+    <div class="news-card" onclick="openNewsModal(${n.id})">
+      <div class="news-card-image">
+        <span style="font-size:60px;">${n.emoji}</span>
+        <span class="news-card-cat">${n.categoria}</span>
+      </div>
+      <div class="news-card-body">
+        <div class="news-card-date">📅 ${n.fecha}</div>
+        <h3>${n.titulo}</h3>
+        <p>${n.extracto}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderQuickDocs() {
+  const grid = document.getElementById('quickDocsGrid');
+  grid.innerHTML = CMS.documentos.map(d => `
+    <div class="doc-card">
+      <div class="doc-icon">${d.emoji}</div>
+      <h4>${d.titulo}</h4>
+      <div class="doc-date">📅 ${d.fecha}</div>
+      <a href="#" class="btn btn-azul" style="font-size:12px;padding:6px 14px;margin-top:4px;">⬇️ Descargar</a>
+    </div>
+  `).join('');
+}
+
+function renderArchivoTable() {
+  const tbody = document.getElementById('archivoTable');
+  tbody.innerHTML = CMS.archivo.map(r => `
+    <tr>
+      <td><strong>${r.titulo}</strong></td>
+      <td>${r.fecha}</td>
+      <td style="max-width:200px;font-size:13px;color:var(--gray);">${r.descripcion}</td>
+      <td>
+        <button class="btn btn-vino" style="font-size:12px;padding:6px 14px;" onclick="openArchivoModal(${r.id})">Ver detalle</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderTransparenciaTable() {
+  const tbody = document.getElementById('transparenciaTable');
+  tbody.innerHTML = CMS.transparencia.map(d => `
+    <tr>
+      <td><strong>${d.titulo}</strong></td>
+      <td><span class="tag tag-azul">${d.tipo}</span></td>
+      <td>${d.fecha}</td>
+      <td><a href="#" class="btn btn-vino" style="font-size:12px;padding:6px 14px;">⬇️ PDF</a></td>
+    </tr>
+  `).join('');
+}
+
+function renderObligacionesTable() {
+  const tbody = document.getElementById('obligacionesTable');
+  tbody.innerHTML = CMS.obligaciones.map((o,i) => `
+    <tr>
+      <td><strong style="font-size:13px;">${o.nombre}</strong></td>
+      <td>${o.responsable}</td>
+      <td>${o.fecha}</td>
+      <td><a href="#" class="btn btn-vino" style="font-size:12px;padding:6px 14px;">📄 Ver</a></td>
+    </tr>
+  `).join('');
+}
+
+function renderPrensaGrid() {
+  const grid = document.getElementById('prensaGrid');
+  grid.innerHTML = CMS.noticias.map(n => `
+    <div class="news-card" onclick="openNewsModal(${n.id})">
+      <div class="news-card-image">
+        <span style="font-size:60px;">${n.emoji}</span>
+        <span class="news-card-cat">${n.categoria}</span>
+      </div>
+      <div class="news-card-body">
+        <div class="news-card-date">📅 ${n.fecha}</div>
+        <h3>${n.titulo}</h3>
+        <p>${n.extracto}</p>
+        <button class="btn btn-azul" style="font-size:12px;padding:8px 16px;margin-top:12px;">Leer más →</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== MODALS =====
+function openNewsModal(id) {
+  const n = CMS.noticias.find(x => x.id === id);
+  document.getElementById('modalTitle').textContent = n.titulo;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="news-detail-img">${n.emoji}</div>
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <span class="tag tag-vino">${n.categoria}</span>
+      <span style="font-size:13px;color:var(--gray);">📅 ${n.fecha}</span>
+    </div>
+    <p style="color:var(--gray);line-height:1.8;font-size:15px;">${n.extracto}</p>
+    <p style="color:var(--gray);line-height:1.8;font-size:15px;margin-top:16px;">El Ayuntamiento de Texcatepec continúa con su compromiso de mantener informada a la ciudadanía sobre todas las acciones de gobierno realizadas en beneficio de la comunidad. Esta y otras actividades forman parte del plan de trabajo institucional del gobierno municipal 2024-2027.</p>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function openArchivoModal(id) {
+  const r = CMS.archivo.find(x => x.id === id);
+  document.getElementById('modalTitle').textContent = r.titulo;
+  document.getElementById('modalBody').innerHTML = `
+    <div style="margin-bottom:20px;">
+      <div class="section-label">Información del Registro</div>
+      <table style="width:100%;margin-top:12px;">
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:10px;color:var(--gray);font-size:14px;">Título:</td><td style="padding:10px;font-weight:600;">${r.titulo}</td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:10px;color:var(--gray);font-size:14px;">Fecha:</td><td style="padding:10px;">${r.fecha}</td></tr>
+        <tr><td style="padding:10px;color:var(--gray);font-size:14px;">Descripción:</td><td style="padding:10px;line-height:1.6;">${r.descripcion}</td></tr>
+      </table>
+    </div>
+    <div style="background:var(--gray-light);padding:20px;border-radius:8px;display:flex;gap:16px;align-items:center;">
+      <span style="font-size:40px;">📄</span>
+      <div>
+        <div style="font-weight:600;margin-bottom:4px;">${r.titulo}.pdf</div>
+        <a href="#" class="btn btn-vino" style="font-size:13px;padding:8px 20px;">⬇️ Descargar documento</a>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ===== FORM =====
+function submitForm() {
+  const n = document.getElementById('contactNombre').value;
+  const c = document.getElementById('contactCorreo').value;
+  const m = document.getElementById('contactMensaje').value;
+  if (!n || !c || !m) { alert('Por favor llena todos los campos.'); return; }
+  document.getElementById('formSuccess').style.display = 'block';
+  document.getElementById('contactNombre').value = '';
+  document.getElementById('contactCorreo').value = '';
+  document.getElementById('contactMensaje').value = '';
+  setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+}
+
+// ===== WEATHER (OpenWeatherMap / simulado) =====
+function loadWeather() {
+  // En producción: fetch(`https://api.openweathermap.org/data/2.5/weather?q=Texcatepec,MX&appid=YOUR_KEY&units=metric`)
+  const conditions = ['☀️ 22°C Despejado', '⛅ 18°C Nublado', '🌧️ 15°C Lluvia', '🌤️ 20°C Parcialmente nublado'];
+  const random = conditions[Math.floor(Math.random() * conditions.length)];
+  document.getElementById('weatherWidget').innerHTML = `<span>${random}</span><span style="opacity:0.7;font-size:11px;">Texcatepec</span>`;
+}
+
+// ===== INIT =====
+renderHomeNews();
+renderQuickDocs();
+renderArchivoTable();
+renderTransparenciaTable();
+renderObligacionesTable();
+renderPrensaGrid();
+loadWeather();
+</script>
+
+</body>
+</html>
